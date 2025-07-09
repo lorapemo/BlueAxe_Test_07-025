@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Card from './Card';
+import { useSelector } from 'react-redux';
 
 const CardHolder = () => {
   const [pokemons, setPokemons] = useState([]);
@@ -8,7 +9,8 @@ const CardHolder = () => {
   const [totalPages, setTotalPages] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchError, setSearchError] = useState('');
-  const pokemonsPerPage = 5;
+  const isScreenSmall = useSelector((state) => state.screen.isScreenSmall)
+  const pokemonsPerPage = isScreenSmall? 6 : 5;
 
   //This could be its own component....<SearchBar>
   const handleSearch = async (e) => {
@@ -75,6 +77,9 @@ const CardHolder = () => {
 
   return (
     <div className="pokemon-app">
+      {
+
+      }
       <form onSubmit={handleSearch} className="search-container">
         <input
           type="text"
@@ -91,6 +96,7 @@ const CardHolder = () => {
         </button>
         {searchError && <div className="search-error">{searchError}</div>}
       </form>
+
       <div className="pokemon-grid">
         {pokemons.map((pokemon) => (
           <Card pokemon={pokemon}></Card>
