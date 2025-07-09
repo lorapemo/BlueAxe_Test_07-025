@@ -1,5 +1,5 @@
 
-const SimpleBorderContainer = ({ children }) => {
+const Container = ({ children }) => {
   return (
     <div className="container">
       <div className="content">
@@ -9,4 +9,4 @@ const SimpleBorderContainer = ({ children }) => {
   );
 };
 
-export default SimpleBorderContainer;
+export default Container;
