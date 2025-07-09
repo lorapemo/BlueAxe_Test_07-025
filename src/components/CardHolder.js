@@ -69,7 +69,11 @@ const CardHolder = () => {
     };
 
     fetchPokemons();
-  }, [page]);
+  }, [page, pokemonsPerPage]);
+  
+  useEffect(()=>{
+    setPage(1);
+  }, [isScreenSmall])
 
   if (loading) {
     return <div className="loading">Loading Pokémon...</div>;
