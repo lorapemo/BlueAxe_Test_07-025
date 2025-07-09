@@ -2,6 +2,7 @@
 Project created as a test for BlueAxe employment.
 Created by Lorenzo Ramón Pérez Morales
 # Installation
+In the weird circumstance that the project doesn't work in your machine please contactme so that I create an ngrok link to temporaly host it
 ## Prerequisites
 Node v22.14.0
 Npm
