@@ -1,23 +1,16 @@
-import logo from './logo.svg';
+
+import CardHolder from './components/CardHolder';
+import SimpleBorderContainer from './components/Container';
+import title from "./images/title.png"
 import './App.css';
+import HelpModal from './components/Helper';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App pokeball-border">
+      <img src={title} className='Title'/>
+      <SimpleBorderContainer children={<CardHolder/>}></SimpleBorderContainer>
+      <HelpModal></HelpModal>
     </div>
   );
 }
