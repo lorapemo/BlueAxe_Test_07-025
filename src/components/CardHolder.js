@@ -1,25 +1,45 @@
 import { useState, useEffect } from 'react';
 import Card from './Card';
+import { useSelector, useDispatch } from 'react-redux';
+import { useFetchPokemons } from '../hooks/useFetchPokemon';
+import { resetType, setPokemonType } from '../controller/pokemonTypeSlice';
 
 const CardHolder = () => {
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [searchError, setSearchError] = useState('');
-  const pokemonsPerPage = 5;
+  const [ buttonText, setButtonText] = useState('Search')
+  const isScreenSmall = useSelector((state) => state.screen.isScreenSmall)
+  const pokemonsPerPage = isScreenSmall ? 6 : 5;
+  const data = useSelector((state) => state.pokemonFetched.data)
+  const fetch_loading = useSelector((state) => state.pokemonFetched.loading)
+  const totalPages = useSelector((state) => state.totalPages.amount)
+  const pokemonTypes = useSelector((state) => state.pokemonType.availablePokemonType)
+  const availablePokemonType = useSelector((state) => state.pokemonType.availablePokemonType)
+  const currentPokemonType = useSelector((state) => state.pokemonType.currentPokemonType)
+  const dispatch = useDispatch();
+
+  useFetchPokemons(pokemonsPerPage, page)
 
   //This could be its own component....<SearchBar>
   const handleSearch = async (e) => {
     e.preventDefault();
-
+    
     if (!searchTerm.trim()) {
-      setSearchError('Please enter a Pokémon name');
+      dispatch(resetType())
       return;
     }
-
+    if (pokemonTypes.includes(searchTerm)) {
+      dispatch(setPokemonType(searchTerm))
+      setSearchTerm('');
+      setSearchError('');
+      return
+    }
     try {
+      dispatch(resetType())
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
       const pokemonData = await response.json();
 
@@ -33,26 +53,17 @@ const CardHolder = () => {
     } catch (error) {
       setSearchError('Pokémon not found');
       console.error("Search error:", error);
+
     }
   };
   // </SearchBar>
 
   useEffect(() => {
-    const fetchPokemons = async () => {
+    const loadPokemons = async () => {
       setLoading(true);
       try {
-        //Fetch the whole page
-        const offset = (page - 1) * pokemonsPerPage;
-        const listResponse = await fetch(
-          `https://pokeapi.co/api/v2/pokemon?limit=${pokemonsPerPage}&offset=${offset}`
-        );
-        const data = await listResponse.json();
-        setTotalPages(Math.ceil(data.count / pokemonsPerPage))
-        //The api only brings general information (name and url) when you call for an offset
-        //Therfore I must then call the API a few more times to get all the relevan info
-        //TBH I don't really like this implementation, I think the API could be better if it just brought back all the info it would by calling the specific poke
         const detailedPokemons = await Promise.all(
-          data.results.map(async (pokemon) => {
+          data.map(async (pokemon) => {
             const detailResponse = await fetch(pokemon.url);
             return await detailResponse.json();
           })
@@ -66,10 +77,21 @@ const CardHolder = () => {
       }
     };
 
-    fetchPokemons();
-  }, [page]);
+    loadPokemons();
+  }, [page, pokemonsPerPage, data]);
 
-  if (loading) {
+  useEffect(() => {
+    setPage(1);
+  }, [isScreenSmall, currentPokemonType])
+  useEffect(() => {
+    if(currentPokemonType !== "All"){
+      setButtonText("Delete Filter")
+      return
+    }
+    setButtonText("Search")
+  }, [currentPokemonType])
+
+  if (loading || fetch_loading) {
     return <div className="loading">Loading Pokémon...</div>;
   }
 
@@ -83,14 +105,15 @@ const CardHolder = () => {
             setSearchTerm(e.target.value);
             setSearchError('');
           }}
-          placeholder="Search Pokémon by name or ID..."
+          placeholder="Search Pokémon by name/ID or type..."
           className="search-input"
         />
         <button type="submit" className="search-button">
-          Search
+          {buttonText}
         </button>
         {searchError && <div className="search-error">{searchError}</div>}
       </form>
+
       <div className="pokemon-grid">
         {pokemons.map((pokemon) => (
           <Card pokemon={pokemon}></Card>

@@ -364,4 +364,11 @@
     border: 0px solid;
     border-image-source: url("C:\Users\Dell\Desktop\LorenzoPerez_BlueAxe\lorapemo_blueaxe\public\pokeball-pokemon-svgrepo-com.svg");
   }
+
+  .App{
+    margin-top:32px;
+    margin-bottom:32px;
+    margin-left:0px;
+    margin-right:0px;
+  }
 }
