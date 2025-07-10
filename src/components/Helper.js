@@ -23,7 +23,10 @@ const HelpModal = () => {
             </button>
             <h3>PokeList Help</h3>
             <p>Browse through different Pokémon using the pagination controls.</p>
-            <p>Use the search bar to find specific Pokémon.</p>
+            <p>Use the search bar to find Pokémon using one of the following:</p>
+            <p> - Its name</p>
+            <p> - Its id</p>
+            <p> - Its type</p>
             <p>Created by Lorenzo Ramón Pérez Morales for BlueAxe.</p>
           </div>
         </div>
