@@ -17,7 +17,7 @@
 
 .pokeball-border {
   border: 32px solid;
-  border-image-source: url("C:\Users\Dell\Desktop\LorenzoPerez_BlueAxe\lorapemo_blueaxe\public\pokeball-pokemon-svgrepo-com.svg");
+  border-image-source: url("/public/pokeball-pokemon-svgrepo-com.svg");
 }
 
 .pokemon-app {
@@ -362,7 +362,7 @@
 
   .pokeball-border {
     border: 0px solid;
-    border-image-source: url("C:\Users\Dell\Desktop\LorenzoPerez_BlueAxe\lorapemo_blueaxe\public\pokeball-pokemon-svgrepo-com.svg");
+    border-image-source: url("../public/pokeball-pokemon-svgrepo-com.svg");
   }
 
   .App{
